@@ -20,7 +20,7 @@ st.set_page_config(
 # Configure Gemini
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
-    st.error("⚠️ GOOGLE_API_KEY not found in environment variables. Please check your .env file.")
+    st.error("⚠️ Non se atopou a GOOGLE_API_KEY nas variables de entorno. Por favor, revisa o teu ficheiro .env.")
     st.stop()
 
 genai.configure(api_key=GOOGLE_API_KEY)
@@ -30,13 +30,13 @@ genai.configure(api_key=GOOGLE_API_KEY)
 def load_config():
     config_path = Path("artist-config.json")
     if not config_path.exists():
-        st.error("❌ artist-config.json not found!")
+        st.error("❌ Non se atopou artist-config.json!")
         return None
     try:
         with open(config_path, "r", encoding="utf-8") as f:
             return json.load(f)
     except Exception as e:
-        st.error(f"❌ Error loading config: {e}")
+        st.error(f"❌ Erro ao cargar a configuración: {e}")
         return None
 
 config = load_config()
@@ -75,7 +75,11 @@ def wait_for_files_active(files):
 
 # --- UI Layout ---
 
-st.title("Xeitosa Social AI 🎵")
+# Logo and Title
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.image("assets/logo.png", use_container_width=True)
+    st.markdown("<h3 style='text-align: center; color: gray;'>Social AI</h3>", unsafe_allow_html=True)
 
 artists = config.get("artists", [])
 artist_names = [artist["name"] for artist in artists]
@@ -87,32 +91,32 @@ selected_artist_name = st.selectbox("Selecciona un Perfil de Artista", artist_na
 selected_artist = next((a for a in artists if a["name"] == selected_artist_name), None)
 
 if selected_artist:
-    with st.expander("ℹ️ Información del Perfil (Audiencia y Tono)", expanded=False):
+    with st.expander("ℹ️ Información do Perfil (Audiencia e Ton)", expanded=False):
         st.markdown(f"**Audiencia:** {selected_artist['target_audience']}")
         st.markdown(f"**Idioma:** {selected_artist['language']}")
-        st.markdown(f"**Tono:** {selected_artist['base_prompt']}")
+        st.markdown(f"**Ton:** {selected_artist['base_prompt']}")
 
 st.markdown("---")
 
 # Inputs (Stacked)
 user_instructions = st.text_area(
-    "Instrucciones para el Copy",
-    placeholder="Ej: Describe el nuevo episodio del podcast con Sheila Patricia...",
+    "Instrucións para o Copy",
+    placeholder="Ex: Describe o novo episodio do podcast con Sheila Patricia...",
     height=150
 )
 
 uploaded_file = st.file_uploader(
-    "Subir Multimedia (Video/Imagen)", 
+    "Subir Multimedia (Vídeo/Imaxe)", 
     type=['mp4', 'mov', 'jpg', 'png']
 )
 
-generate_btn = st.button("✨ Generar Copy", type="primary", use_container_width=True)
+generate_btn = st.button("✨ Xerar Copy", type="primary", use_container_width=True)
 
 if generate_btn:
     if not user_instructions and not uploaded_file:
-        st.warning("Por favor, escribe instrucciones o sube un archivo.")
+        st.warning("Por favor, escribe instrucións ou sube un ficheiro.")
     else:
-            with st.spinner("Generating content... This may take a moment."):
+            with st.spinner("Xerando contido... Isto pode levar un momento."):
                 try:
                     # 1. Handle File Upload
                     gemini_file = None
@@ -159,7 +163,7 @@ if generate_btn:
                     response = model.generate_content(prompt_parts)
                     
                     # Display Output
-                    st.success("Copy Generado:")
+                    st.success("Copy Xerado:")
                     st.markdown(response.text)
                     
                     # 4. Cleanup
@@ -170,7 +174,7 @@ if generate_btn:
                     # but in production we might want to clean up cloud resources too.
                     
                 except Exception as e:
-                    st.error(f"Ocurrió un error: {e}")
+                    st.error(f"Ocorreu un erro: {e}")
                     # Cleanup on error
                     if temp_file_path and os.path.exists(temp_file_path):
                         os.unlink(temp_file_path)
