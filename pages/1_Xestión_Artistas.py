@@ -298,4 +298,4 @@ with tab3:
                     st.success(f"Perfil de {f_name} gardado!")
                     # Clear session state after save
                     st.session_state.ai_analysis_result = None
-                    st.switch_page("Social_AI.py")
+                    st.switch_page("app.py")
