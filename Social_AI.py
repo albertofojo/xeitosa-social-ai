@@ -26,7 +26,6 @@ if not GOOGLE_API_KEY:
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # Load Artist Configuration
-@st.cache_data
 def load_config():
     config_path = Path("artist-config.json")
     if not config_path.exists():
@@ -80,6 +79,12 @@ col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.image("assets/logo.png", use_container_width=True)
     st.markdown("<h3 style='text-align: center; color: gray;'>Social AI</h3>", unsafe_allow_html=True)
+
+with col3:
+    st.write("") # Spacer
+    st.write("") # Spacer
+    if st.button("⚙️", help="Xestionar Artistas"):
+        st.switch_page("pages/1_Xestión_Artistas.py")
 
 artists = config.get("artists", [])
 artist_names = [artist["name"] for artist in artists]

@@ -53,7 +53,7 @@ Los perfiles de los artistas se definen en `artist-config.json`. Puedes añadir 
 Ejecuta la aplicación con Streamlit:
 
 ```bash
-streamlit run app.py
+streamlit run Social_AI.py
 ```
 
 La aplicación se abrirá automáticamente en tu navegador (normalmente en `http://localhost:8501`).
