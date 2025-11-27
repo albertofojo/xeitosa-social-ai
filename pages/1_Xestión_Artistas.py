@@ -19,7 +19,7 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if GOOGLE_API_KEY:
     genai.configure(api_key=GOOGLE_API_KEY)
 
-st.set_page_config(page_title="Xestión de Artistas", page_icon="📝", layout="wide")
+st.set_page_config(page_title="Xestión de Artistas", page_icon="📝", layout="centered")
 
 CONFIG_PATH = Path("artist-config.json")
 
@@ -130,7 +130,13 @@ def analyze_style_with_ai(artist_name, sample_texts, language="Galego"):
         st.error(f"Erro na análise da IA: {e}")
         return None
 
-st.title("Xestión de Artistas 📝")
+# Header with Back Button
+col_header_1, col_header_2 = st.columns([6, 1])
+with col_header_1:
+    st.title("Xestión de Artistas 📝")
+with col_header_2:
+    if st.button("🏠 Volver", help="Volver á pantalla principal"):
+        st.switch_page("app.py")
 
 config = load_config()
 artists = config.get("artists", [])

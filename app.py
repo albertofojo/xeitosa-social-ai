@@ -83,8 +83,16 @@ with col2:
 artists = config.get("artists", [])
 artist_names = [artist["name"] for artist in artists]
 
-# Artist Selection (Top)
-selected_artist_name = st.selectbox("Selecciona un Perfil de Artista", artist_names)
+# Artist Selection Section
+col_art_1, col_art_2 = st.columns([5, 1])
+with col_art_1:
+    st.subheader("Artistas")
+with col_art_2:
+    st.write("") # Spacer for alignment
+    if st.button("⚙️", help="Xestionar Artistas", key="settings_btn"):
+        st.switch_page("pages/1_Xestión_Artistas.py")
+
+selected_artist_name = st.selectbox("Selecciona un Perfil de Artista", artist_names, label_visibility="collapsed")
 
 # Get selected artist data
 selected_artist = next((a for a in artists if a["name"] == selected_artist_name), None)
@@ -95,7 +103,9 @@ if selected_artist:
         st.markdown(f"**Idioma:** {selected_artist['language']}")
         st.markdown(f"**Ton:** {selected_artist['base_prompt']}")
 
-st.markdown("---")
+# Separator removed as requested
+
+st.subheader("Xeración de Contido")
 
 # Inputs (Stacked)
 user_instructions = st.text_area(
